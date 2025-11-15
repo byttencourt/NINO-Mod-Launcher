@@ -7,7 +7,22 @@ app = Flask(__name__)
 AUTHORIZED_FILE = "authorized.json"
 ACTIVATOR_FOLDER = "activators"   # pasta local com os ativadores reais
 
-
+def require_auth(func):
+    """Decorador para verificar se a chave (key) é igual ao HWID."""
+    def wrapper(*args, **kwargs):
+        # A chave de acesso
+        key = request.args.get("key")
+        # O HWID do usuário
+        hwid = request.args.get("hwid")
+        
+        # O acesso é autorizado se a chave for o próprio HWID (autenticação)
+        if not key or key != hwid:
+            return jsonify({"error": "Unauthorized access"}), 401
+        
+        return func(*args, **kwargs)
+    wrapper.__name__ = func.__name__ 
+    return wrapper
+    
 @app.route("/")
 def home():
     return jsonify({
@@ -17,6 +32,7 @@ def home():
 
 
 @app.route("/authorized")
+@require_auth
 def get_authorized():
     if not os.path.exists(AUTHORIZED_FILE):
         return jsonify({"error": "authorized.json not found"}), 404
@@ -28,6 +44,7 @@ def get_authorized():
 
 
 @app.route("/get_activator")
+@require_auth
 def get_activator():
     """Entrega ativador SEM expor endereço real"""
 
