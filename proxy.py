@@ -1,82 +1,59 @@
-from flask import Flask, request, jsonify, Response
-import requests
 import os
+import json
+from flask import Flask, jsonify, send_file, request, abort
 
 app = Flask(__name__)
 
-# URL do authorized.json público
-AUTHORIZED_URL = "https://raw.githubusercontent.com/byttencourt/AuthProtector/main/authorized.json"
-
-# Nome do repositório privado onde ficam os ativadores
-# Ex: "byttencourt/ModActivators"
-PRIVATE_REPO = os.getenv("PRIVATE_REPO")
-
-# Token do GitHub (NUNCA colocar aqui, apenas no Render!)
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+AUTHORIZED_FILE = "authorized.json"
+ACTIVATOR_FOLDER = "activators"   # pasta local com os ativadores reais
 
 
 @app.route("/")
 def home():
-    return "NINOMODS ACTIVATION PROXY ONLINE"
+    return jsonify({
+        "status": "online",
+        "service": "Mods Proxy"
+    })
 
 
-@app.route("/get_activator", methods=["GET"])
+@app.route("/authorized")
+def get_authorized():
+    if not os.path.exists(AUTHORIZED_FILE):
+        return jsonify({"error": "authorized.json not found"}), 404
+
+    with open(AUTHORIZED_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    return jsonify(data)
+
+
+@app.route("/get_activator")
 def get_activator():
-    mod = request.args.get("mod")
+    """Entrega ativador SEM expor endereço real"""
+
+    mod_name = request.args.get("mod")
     hwid = request.args.get("hwid")
 
-    if not mod or not hwid:
-        return jsonify({"error": "missing mod or hwid"}), 400
+    if not mod_name or not hwid:
+        return jsonify({"error": "Missing parameters"}), 400
 
-    # 1 — Buscar authorized.json público
-    try:
-        data = requests.get(AUTHORIZED_URL).json()
-    except Exception:
-        return jsonify({"error": "cannot load authorized.json"}), 500
+    # Carregar lista
+    with open(AUTHORIZED_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
 
-    # 2 — Procurar mod na lista
-    if mod not in data:
-        return jsonify({"error": "mod not found in authorization list"}), 403
+    # Verificar se mod existe
+    if mod_name not in data:
+        return jsonify({"error": "Mod not registered"}), 404
 
-    entry = data[mod]
+    # Verificar HWID
+    if hwid not in data[mod_name]["allowed"]:
+        return jsonify({"error": "HWID not authorized"}), 403
 
-    allowed = entry.get("allowed", [])
-    banned = entry.get("banned", [])
+    # Caminho interno do ativador
+    file_path = os.path.join(ACTIVATOR_FOLDER, f"{mod_name} ATIVADOR.scs")
 
-    # 3 — Validar HWID
-    if hwid in banned:
-        return jsonify({"error": "HWID BANNED"}), 403
+    if not os.path.exists(file_path):
+        return jsonify({"error": "Activator file missing"}), 500
 
-    if hwid not in allowed:
-        return jsonify({"error": "HWID NOT AUTHORIZED"}), 403
-
-    # 4 — Arquivo no GitHub privado
-    # O nome do arquivo é derivado do nome do mod:
-    # Ex: mod "NINOmods Truck4speed.scs" => ativador "NINOmods Truck4speed ATIVADOR.scs"
-    activator_name = mod.replace(".scs", " ATIVADOR.scs")
-
-    file_url = f"https://api.github.com/repos/{PRIVATE_REPO}/contents/{activator_name}"
-
-    # 5 — Requisição autenticada ao GitHub
-    headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.raw"
-    }
-
-    file_response = requests.get(file_url, headers=headers)
-
-    if file_response.status_code != 200:
-        return jsonify({"error": "activator not found in private repo"}), 404
-
-    # 6 — Stream do arquivo diretamente
-    return Response(
-        file_response.content,
-        mimetype="application/octet-stream",
-        headers={
-            "Content-Disposition": f"attachment; filename={activator_name}"
-        }
-    )
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    # O Render envia normalmente via send_file
+    return send_file(file_path, as_attachment=True)
