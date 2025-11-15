@@ -9,12 +9,14 @@
       ]
     },
 
-    "NINOmods_GlobalPack": {
+    "NINOmods Fh6 157.scs": {
       "allowed_hwids": [
-        "HWID_DO_USUARIO_1",
+        ""8ecbd024646c7249d144745d2abfec3d8095595f229e89ab8817a82ccbc953ec",
         "HWID_DO_USUARIO_2"
       ],
-      "banned_hwids": []
+      "banned_hwids": [
+        "EXEMPLO_DE_HWID_BANIDO"
+      ]
     }
   }
 }
