@@ -1,6 +1,6 @@
 {
   "mods": {
-    "NINOmods Fh6 156.scs": {
+    "NINOmods Fh6 156": {
       "allowed_hwids": [
         "8ecbd024646c7249d144745d2abfec3d8095595f229e89ab8817a82ccbc953ec"
       ],
@@ -9,7 +9,7 @@
       ]
     },
 
-    "NINOmods_GlobalPack.scs": {
+    "NINOmods_GlobalPack": {
       "allowed_hwids": [
         "HWID_DO_USUARIO_1",
         "HWID_DO_USUARIO_2"
