@@ -2,7 +2,7 @@
   "mods": {
     "NINOmods Fh6 156.scs": {
       "allowed_hwids": [
-        "edc366720ff6b7fa10457660e756b494972b773336c5a11a6589afa1689c3429"
+        "8ecbd024646c7249d144745d2abfec3d8095595f229e89ab8817a82ccbc953ec"
       ],
       "banned_hwids": [
         "EXEMPLO_DE_HWID_BANIDO"
