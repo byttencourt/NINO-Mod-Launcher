@@ -80,5 +80,5 @@ Este projeto exemplifica a aplicação de **Engenharia de Software Aumentada por
 
 ---
 
-**Desenvolvido por [Seu Nome]**
+**Desenvolvido por Claudio A. Bittencourt**
 *Senior Full Stack Developer | Desktop & Security Specialist*
