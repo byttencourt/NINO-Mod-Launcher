@@ -1,85 +1,84 @@
-# Nino Launcher Platform 🛡️🚀
+# Nino Digital Asset Platform 🛡️🚀
 
-> **Plataforma Desktop de Distribuição Segura de Software (DRM), Gestão de Mods e Pagamentos em Tempo Real.**
+> **Plataforma Desktop Enterprise para Distribuição de Conteúdo Digital (DaaS), Gestão de Licenças e Fintech Integrada.**
 
-![Status](https://img.shields.io/badge/Status-Production-green)
-![Security](https://img.shields.io/badge/Security-Proprietary-red)
-![Stack](https://img.shields.io/badge/Stack-Electron%20%7C%20React%20%7C%20Supabase-blue)
+![Status](https://img.shields.io/badge/Production-Ready-green)
+![Architecture](https://img.shields.io/badge/Architecture-Event--Driven-blueviolet)
+![Stack](https://img.shields.io/badge/Stack-Electron%20%7C%20React%20%7C%20Node.js-blue)
 
-## 🔒 Aviso de Propriedade Intelectual & Segurança
+## 🔒 Aviso de Propriedade Intelectual
 
-**Este é um repositório de Demonstração (Showcase).**
+**Repositório de Demonstração Técnica (Showcase)**
 
-Devido à implementação de algoritmos proprietários de **Anti-Tamper, DRM (Digital Rights Management) e Proteção de Memória**, o código-fonte completo deste projeto é mantido em repositório privado para garantir a integridade do ecossistema e a segurança dos usuários finais.
-
-Este documento detalha a **Arquitetura de Software, Decisões de Engenharia e Stack Tecnológica** utilizadas no desenvolvimento, demonstrando as competências técnicas aplicadas.
+O código-fonte core desta aplicação é **proprietário e fechado (Closed Source)**. Este repositório serve como documentação técnica e portfólio de arquitetura, demonstrando competências em desenvolvimento Desktop, Segurança de Aplicação e Integração de Pagamentos.
 
 ---
 
-## 📋 Sobre o Projeto
+## 📋 Visão Geral do Produto
 
-O **Nino Launcher** é uma solução completa de **SaaS (Software as a Service)** para desktop, projetada para resolver o problema de pirataria e distribuição de conteúdo digital (Mods para Euro Truck Simulator 2).
+O **Nino Platform** é uma solução **SaaS (Software as a Service)** desenvolvida para resolver desafios complexos na distribuição de ativos digitais premium. A plataforma atua como um ecossistema seguro que conecta criadores de conteúdo aos usuários finais, garantindo a monetização e a integridade do produto.
 
-Atuando como **Lead Developer e Arquiteto**, desenvolvi uma aplicação que não apenas gerencia downloads, mas cria um ambiente de execução seguro (Sandbox) para garantir que apenas usuários licenciados acessem o conteúdo premium.
-
----
-
-## 🛠️ Arquitetura Técnica
-
-### 🖥️ Frontend & Desktop (Client-Side)
-*   **Electron & React (Vite):** Arquitetura híbrida focada em performance e UX responsiva.
-*   **IPC Seguro:** Comunicação assíncrona e tipada entre processos Main (Node.js) e Renderer (React) para evitar vazamento de contexto.
-*   **Design System:** Interface moderna com Glassmorphism e suporte a temas (Modo Imersivo/Padrão), construída com Tailwind CSS.
-
-### ☁️ Backend & Fintech (Serverless)
-*   **Supabase (BaaS):** Utilizado para Autenticação (Auth), Banco de Dados (PostgreSQL) e Realtime.
-*   **Edge Functions (Deno):**
-    *   O processamento de pagamentos sensíveis é isolado no Backend.
-    *   As credenciais de API (Mercado Pago) nunca são expostas ao cliente.
-*   **Mercado Pago Integration:** Webhooks e Polling para aprovação instantânea de transações PIX e liberação automática de licenças.
-
-### 🛡️ Engenharia de Segurança (O Diferencial)
-
-O sistema implementa múltiplas camadas de defesa em profundidade:
-
-1.  **Sistema "Sentinel" (Heurística em Tempo Real):**
-    *   Monitoramento de integridade de processos em execução.
-    *   Detecção de ferramentas de engenharia reversa e debuggers.
-    *   Proteção contra injeção de DLLs e leitura de memória.
-
-2.  **Proteção de Arquivos (Race Conditions & Locking):**
-    *   Algoritmos robustos para manipulação de arquivos no Windows, prevenindo erros de `EPERM`/`EBUSY` e garantindo limpeza ("Nuke") de arquivos temporários mesmo em caso de falha do sistema.
-    *   Uso de atributos de sistema ocultos e manipulação direta de File Descriptors.
-
-3.  **Dead Man's Switch (Processo Guardião):**
-    *   Um processo filho independente monitora a saúde do Launcher principal. Em caso de encerramento forçado (Kill Process), o Guardião executa protocolos de emergência para limpar dados sensíveis.
+### Principais Desafios Resolvidos:
+1.  **Proteção de Receita:** Sistema robusto de validação de licenças em tempo real para prevenir uso não autorizado.
+2.  **Experiência do Usuário (UX):** Unificação de Loja, Biblioteca e Execução em uma interface única e responsiva.
+3.  **Automação de Vendas:** Processamento de pagamentos instantâneos sem intervenção humana.
 
 ---
 
-## 📸 Galeria do Projeto
+## 🛠️ Stack Tecnológica & Arquitetura
 
-| **Loja & Gestão de Conteúdo** | **Checkout PIX em Tempo Real** |
+O projeto utiliza uma arquitetura híbrida moderna, priorizando performance e segurança.
+
+### 🖥️ Client-Side (Desktop)
+*   **Electron & React (TypeScript):** Desenvolvimento de aplicação cross-platform com tipagem estrita para garantir robustez e manutenibilidade.
+*   **Gerenciamento de Estado:** Arquitetura reativa utilizando Context API para sincronização global de estado (Carrinho, Sessão, Downloads).
+*   **IPC (Inter-Process Communication):** Camada de comunicação segura e tipada entre o processo principal (Node.js) e a interface (Renderer), seguindo o princípio de privilégio mínimo.
+
+### ☁️ Server-Side & Cloud (Serverless)
+*   **Supabase (BaaS):**
+    *   **PostgreSQL:** Banco de dados relacional para gestão de usuários, inventário e logs de auditoria.
+    *   **Auth:** Sistema de autenticação seguro com persistência de sessão.
+*   **Edge Functions (Deno/TypeScript):** Backend serverless para processamento de transações sensíveis, garantindo que chaves de API e lógica de negócios crítica nunca sejam expostas ao cliente.
+
+### 💳 Fintech & Integração de Pagamentos
+*   **Mercado Pago API:** Implementação completa de checkout transparente via PIX.
+*   **Real-time Polling:** Sistema inteligente de verificação de status de pagamento para aprovação e entrega imediata do ativo digital (Instant Delivery).
+
+---
+
+## 🛡️ Segurança e Integridade (High-Level)
+
+A plataforma implementa uma estratégia de **Defesa em Profundidade** para proteger a propriedade intelectual:
+
+*   **Runtime Integrity Checks:** Monitoramento contínuo do ambiente de execução para garantir que a aplicação não foi adulterada.
+*   **Secure Asset Delivery:** Pipeline de entrega onde os ativos são descriptografados apenas em memória ou em ambiente controlado, minimizando a superfície de ataque.
+*   **Hardware ID Binding (HWID):** Sistema de licenciamento atrelado à assinatura única do hardware do usuário, prevenindo compartilhamento de contas.
+
+---
+
+## 🔄 DevOps & CI/CD
+
+*   **Auto-Update System:** Pipeline de atualização automatizada (OTA) utilizando GitHub Releases, garantindo que todos os clientes recebam patches de segurança e novas funcionalidades sem intervenção manual.
+
+---
+
+## 📸 Galeria
+
+| **Dashboard & Analytics** | **Checkout Fintech (PIX)** |
 |:---:|:---:|
-| *Interface moderna para aquisição de ativos digitais.* | *Geração de QR Code e aprovação instantânea via WebSocket/Polling.* |
+| *[INSIRA PRINT DA TELA INICIAL]* | *[INSIRA PRINT DO PAGAMENTO]* |
 
-| **Dashboard do Usuário** | **Sistema de Alerta de Segurança** |
+| **Gestão de Licenças** | **Loja Integrada** |
 |:---:|:---:|
-| *Gestão de biblioteca, atualizações e instalação automática.* | *Feedback visual e sonoro para violações de integridade.* |
+| *[INSIRA PRINT DA ADMINISTRAÇÃO]* | *[INSIRA PRINT DA LOJA]* |
 
 ---
 
-## 🧠 Metodologia: AI-Augmented Engineering
+## 🚀 Metodologia: AI-Driven Engineering
 
-Este projeto é um exemplo prático de **Desenvolvimento Acelerado por IA**.
-Utilizando técnicas avançadas de Engenharia de Prompts e LLMs, atuei como **Arquiteto de Software**, guiando a implementação de:
-
-*   Lógicas complexas de Sistema Operacional (Windows API via Node.js).
-*   Integrações de API bancária segura.
-*   Sistemas de Auto-Update (CI/CD com GitHub Releases).
-
-Essa abordagem permitiu reduzir o ciclo de desenvolvimento de meses para semanas, mantendo a qualidade de código Enterprise.
+Este projeto exemplifica a aplicação de **Engenharia de Software Aumentada por IA**. Atuei como Arquiteto Líder, utilizando LLMs para acelerar a implementação de módulos boilerplate, permitindo foco total na lógica de negócios complexa, arquitetura de segurança e refinamento de UX.
 
 ---
 
 **Desenvolvido por [Seu Nome]**
-*Full Stack Desktop Developer | Security Enthusiast*
+*Senior Full Stack Developer | Desktop & Security Specialist*
