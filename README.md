@@ -66,7 +66,7 @@ A plataforma implementa uma estratégia de **Defesa em Profundidade** para prote
 
 | **Dashboard & Analytics** | **Checkout Fintech (PIX)** |
 |:---:|:---:|
-| *[INSIRA PRINT DA TELA INICIAL]* | *[INSIRA PRINT DO PAGAMENTO]* |
+| [*[INSIRA PRINT DA TELA INICIAL]*](https://i.imgur.com/k5cylvz.png) | *[INSIRA PRINT DO PAGAMENTO]* |
 
 | **Gestão de Licenças** | **Loja Integrada** |
 |:---:|:---:|
